@@ -1,5 +1,5 @@
-import Movies from './lib/store/movies';
-import streamer from './lib/tweet-streamer';
+import Movies from '../lib/store/movies';
+import streamer from '../lib/tweet-streamer';
 
 const sourceStreamers = {
     tw: 'twitter',

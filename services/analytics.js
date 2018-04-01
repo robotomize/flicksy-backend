@@ -1,14 +1,14 @@
-import Movies from './lib/store/movies';
-import Rating from './lib/math';
+import Movies from '../lib/store/movies';
+import Rating from '../lib/math';
 import Sentiment from 'sentiment';
-import SentimentModel, {sentimentStatuses} from './lib/models/sentiment';
-import RankModel from './lib/models/rank';
-import ProcessModel from './lib/models/process';
-import Processes from './lib/store/processes';
+import SentimentModel, {sentimentStatuses} from '../lib/models/sentiment';
+import RankModel from '../lib/models/rank';
+import ProcessModel from '../lib/models/process';
+import Processes from '../lib/store/processes';
 import hash from 'object-hash';
-import User from './lib/models/user';
-import Users from './lib/store/users';
-import Ranks from './lib/store/ranks';
+import User from '../lib/models/user';
+import Users from '../lib/store/users';
+import Ranks from '../lib/store/ranks';
 
 let processedCount = 0,
     moviesCount = 0;

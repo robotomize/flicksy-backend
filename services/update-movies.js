@@ -1,8 +1,9 @@
-import Movies from './lib/store/movies';
-import Parser from './lib/parser';
-import Movie from './lib/models/movie';
-import {statuses} from "./lib/models/movie";
+import Movies from '../lib/store/movies';
+import Parser from '../lib/parser';
+import Movie from '../lib/models/movie';
+import {statuses} from "../lib/models/movie";
 import hash from 'object-hash';
+import Utils from '../lib/utils/common';
 
 const main = async () => {
     console.log('Movie updater started');
@@ -19,7 +20,7 @@ const main = async () => {
                 if (!findMovie) {
                     await new Movie({
                         name: movie.name,
-                        movieIndex: hash(movie.name + ':' + movie.description),
+                        movieIndex: Utils.getMovieIndex(movie.name, movie.releaseDate),
                         description: movie.description,
                         status: statuses.active,
                         genre: movie.genre,
