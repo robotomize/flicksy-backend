@@ -8,8 +8,11 @@ const router = new Router();
 
 /**
  * Get movies
+ *
+ * Parameters status = 1,2,3 - все, только активные, только не активные
+ *
  */
-router.get('/get/movies/', async ctx => {
+router.get('/get/movies/:status', async ctx => {
     const movies = await Movies.findActiveMovies();
     ctx.body = JSON.stringify(movies.map(movie => {
         return {
@@ -23,6 +26,26 @@ router.get('/get/movies/', async ctx => {
         }
     }));
 });
+
+/**
+ *
+ *
+ */
+router.get('/get/movie/:index', async ctx => {
+    const movies = await Movies.findActiveMovies();
+    ctx.body = JSON.stringify(movies.map(movie => {
+        return {
+            name: movie.name,
+            movieIndex: movie.movieIndex,
+            description: movie.description,
+            status: movie.status,
+            poster: movie.poster,
+            releaseDate: movie.releaseDate,
+            genre: movie.genre
+        }
+    }));
+});
+
 
 /**
  *  get data by movie
