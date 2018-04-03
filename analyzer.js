@@ -1,2 +1,2 @@
 require('babel-core/register');
-require('./analytics-service');
+require('./services/analytics');

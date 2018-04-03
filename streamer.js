@@ -1,2 +1,2 @@
 require('babel-core/register');
-require('./stream-service');
+require('./services/stream');
