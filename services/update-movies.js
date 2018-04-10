@@ -2,62 +2,76 @@ import Movies from '../lib/store/movies';
 import Parser from '../lib/parser';
 import Movie from '../lib/models/movie';
 import {statuses} from "../lib/models/movie";
-import hash from 'object-hash';
 import Utils from '../lib/utils/common';
 
 const main = async () => {
     console.log('Movie updater started');
+
     try {
         const parser = new Parser(),
-            parsedMovies = await parser.getMovies(false),
-            savedMovies = await Movies.findActiveMovies(false);
-        console.log(parsedMovies);
-        await Movies.offMovies();
-        for (let movie of parsedMovies) {
-            let findMovie = savedMovies.find(element => element.name === movie.name);
-            if (findMovie === undefined) {
-                findMovie = await Movies.findByIndex(hash(movie.name + ':' + movie.description));
-                if (!findMovie) {
-                    await new Movie({
-                        name: movie.name,
-                        movieIndex: Utils.getMovieIndex(movie.name, movie.releaseDate),
-                        description: movie.description,
-                        status: statuses.active,
-                        genre: movie.genre,
-                        releaseDate: movie.releaseDate,
-                        poster: movie.poster
-                    }).save().catch(err => {
-                        console.error(err);
-                    });
-                    console.log(`Movie ${movie.name} created`);
-                } else {
-                    findMovie.status = statuses.active;
-                    findMovie.markModified('status');
-                    await findMovie.save(err => {
-                        if (err) {
-                            console.log(err);
-                        }
-                    }).catch(err => {
-                        console.log(err);
-                    });
-                    console.log(`Movie ${movie.name} updated`);
-                }
-            } else {
-                findMovie.status = statuses.active;
-                findMovie.markModified('status');
-                await findMovie.save(err => {
-                    if (err) {
-                        console.log(err);
-                    }
-                }).catch(err => {
-                    console.log(err);
-                });
-            }
-        }
+            externalMovies = await parser.getMovies(false);
+        let localMovies = await Movies.findEnabledMovies(false);
+        console.log(externalMovies);
+        disabledMovies(externalMovies, localMovies);
+        localMovies = await Movies.findEnabledMovies(false);
+        addMovies(externalMovies, localMovies);
     } catch (e) {
         console.error(e);
     }
+
     process.exit();
+};
+
+/**
+ *
+ * @param externalMovies
+ * @param localMovies
+ * @returns {Promise.<void>}
+ */
+const addMovies = async (externalMovies, localMovies) => {
+    for (let localMovie of localMovies) {
+        let findMovie = externalMovies.find(element => element.name === localMovie.name);
+        if (findMovie === undefined || findMovie === null) {
+            localMovie.status = statuses.disabled;
+            localMovie.markModified('status');
+            await localMovie.save(err => {
+                if (err) {
+                    console.log(err);
+                }
+            }).catch(err => {
+                console.log(err);
+            });
+            console.log(`Movie ${localMovie.name} is offline`);
+        } else {
+            console.log(`Movie ${localMovie.name} is exist`);
+        }
+    }
+};
+
+/**
+ *
+ * @param externalMovies
+ * @param localMovies
+ * @returns {Promise.<void>}
+ */
+const disabledMovies = async (externalMovies, localMovies) => {
+    for (let externalMovie of externalMovies) {
+        let findMovie = localMovies.find(element => element.name === externalMovie.name);
+        if (findMovie === undefined || findMovie === null) {
+            await new Movie({
+                name: externalMovie.name,
+                movieIndex: Utils.getMovieIndex(externalMovie.name, externalMovie.releaseDate),
+                description: externalMovie.description,
+                status: statuses.enabled,
+                genre: externalMovie.genre,
+                releaseDate: externalMovie.releaseDate,
+                poster: externalMovie.poster
+            }).save().catch(err => {
+                console.error(err);
+            });
+            console.log(`Movie ${externalMovie.name} is created`);
+        }
+    }
 };
 
 main();

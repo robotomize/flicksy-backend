@@ -180,7 +180,7 @@ const calculateRank = async (movie, medians, averages) => {
 
 const main = async () => {
     try {
-        const movies = await Movies.findActiveMovies();
+        const movies = await Movies.findEnabledMovies();
         moviesCount = movies.length;
         for (let movie of movies) {
             calculateRank(movie);

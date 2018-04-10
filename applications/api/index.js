@@ -13,7 +13,7 @@ const router = new Router();
  *
  */
 router.get('/get/movies/:status', async ctx => {
-    const movies = await Movies.findActiveMovies();
+    const movies = await Movies.findEnabledMovies();
     ctx.body = JSON.stringify(movies.map(movie => {
         return {
             name: movie.name,
@@ -32,7 +32,7 @@ router.get('/get/movies/:status', async ctx => {
  *
  */
 router.get('/get/movie/:index', async ctx => {
-    const movies = await Movies.findActiveMovies();
+    const movies = await Movies.findEnabledMovies();
     ctx.body = JSON.stringify(movies.map(movie => {
         return {
             name: movie.name,

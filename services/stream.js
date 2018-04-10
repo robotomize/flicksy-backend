@@ -7,7 +7,7 @@ const sourceStreamers = {
 };
 const main = async () => {
     try {
-        const movies = await Movies.findActiveMovies(false);
+        const movies = await Movies.findEnabledMovies(false);
         let randIndex = Math.floor(Math.random() * (movies.length - 1)),
             stream = new streamer(movies[randIndex], sourceStreamers.tw);
         stream.create().catch((e) => {
