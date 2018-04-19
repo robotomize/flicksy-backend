@@ -1,8 +1,8 @@
-import Movies from '../lib/store/movies';
-import Parser from '../lib/parser';
-import Movie from '../lib/models/movie';
-import {statuses} from "../lib/models/movie";
-import Utils from '../lib/utils/common';
+const Movies = require('../lib/store/movies'),
+    Parser = require('../lib/parser'),
+    Movie = require('../lib/models/movie'),
+    Utils = require('../lib/utils/common'),
+    movieStatuses = Movie.statuses;
 
 const main = async () => {
     console.log('Movie updater started');
@@ -32,7 +32,7 @@ const addMovies = async (externalMovies, localMovies) => {
     for (let localMovie of localMovies) {
         let findMovie = externalMovies.find(element => element.name === localMovie.name);
         if (findMovie === undefined || findMovie === null) {
-            localMovie.status = statuses.disabled;
+            localMovie.status = movieStatuses.disabled;
             localMovie.markModified('status');
             await localMovie.save(err => {
                 if (err) {
@@ -62,7 +62,7 @@ const disabledMovies = async (externalMovies, localMovies) => {
                 name: externalMovie.name,
                 movieIndex: Utils.getMovieIndex(externalMovie.name, externalMovie.releaseDate),
                 description: externalMovie.description,
-                status: statuses.enabled,
+                status: movieStatuses.enabled,
                 genre: externalMovie.genre,
                 releaseDate: externalMovie.releaseDate,
                 poster: externalMovie.poster
