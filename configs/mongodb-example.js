@@ -2,6 +2,6 @@ const host = 'mongodb://localhost',
     port = 27017,
     conn = `${host}:${port}/`;
 
-export {host}
-export {port}
-export default conn;
+module.exports.host = host;
+module.exports.port = port;
+module.exports.conn = conn;
