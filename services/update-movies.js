@@ -1,8 +1,9 @@
 const Movies = require('../lib/store/movies'),
     Parser = require('../lib/parser'),
-    Movie = require('../lib/models/movie'),
+    movie = require('../lib/models/movie'),
+    Movie = movie.model,
     Utils = require('../lib/utils/common'),
-    movieStatuses = Movie.statuses;
+    movieStatuses = movie.statuses;
 
 const main = async () => {
     console.log('Movie updater started');
