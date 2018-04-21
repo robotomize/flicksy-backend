@@ -13,9 +13,9 @@ const main = async () => {
             externalMovies = await parser.getMovies(false);
         let localMovies = await Movies.findEnabledMovies(false);
         console.log(externalMovies);
-        disabledMovies(externalMovies, localMovies);
+        add(externalMovies, localMovies);
         localMovies = await Movies.findEnabledMovies(false);
-        addMovies(externalMovies, localMovies);
+        disable(externalMovies, localMovies);
     } catch (e) {
         console.error(e);
     }
@@ -29,7 +29,7 @@ const main = async () => {
  * @param localMovies
  * @returns {Promise.<void>}
  */
-const addMovies = async (externalMovies, localMovies) => {
+const disable = async (externalMovies, localMovies) => {
     for (let localMovie of localMovies) {
         let findMovie = externalMovies.find(element => element.name === localMovie.name);
         if (findMovie === undefined || findMovie === null) {
@@ -55,7 +55,7 @@ const addMovies = async (externalMovies, localMovies) => {
  * @param localMovies
  * @returns {Promise.<void>}
  */
-const disabledMovies = async (externalMovies, localMovies) => {
+const add = async (externalMovies, localMovies) => {
     for (let externalMovie of externalMovies) {
         let findMovie = localMovies.find(element => element.name === externalMovie.name);
         if (findMovie === undefined || findMovie === null) {

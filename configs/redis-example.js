@@ -1,5 +1,4 @@
-const redisPort = 6379;
-const redisHost = 'localhost';
-
-export {redisPort}
-export {redisHost}
+module.exports = {
+    port: 6379,
+    host: 'localhost'
+};
